@@ -2,7 +2,6 @@ Here’s the cleaned-up, short, image-free version without other people’s name
 
 ---
 
-Demo - ![Alt Text](MOT16_eval/image_.png)
 
 # YOLOv5 + DeepSort (PyTorch)
 
