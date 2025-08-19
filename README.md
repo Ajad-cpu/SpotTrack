@@ -1,4 +1,3 @@
-town.gif
 Here’s the cleaned-up, short, image-free version without other people’s names or repo links:
 
 ---
