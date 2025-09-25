@@ -1,97 +1,81 @@
-# Fix README screenshot links — commands & patch
-
-Use these commands from your repo root (Git Bash). They rename screenshots (if they exist with spaces), update `README.md`, commit and push.
+# SpotTrack — YOLOv5 + DeepSort (PyTorch)
 
 ---
+Lightweight, real-time multi-object tracking that combines YOLOv5 detections with a Deep SORT–style re-identification tracker in PyTorch. Configurable for speed or accuracy; runs on images, video, webcams and streams; tracks any object classes your YOLOv5 model is trained to detect.
+Demo 1 - ![Alt Text](MOT16_eval/Screenshot-2025-08-19-193426.png)
+Demo 2 - ![Alt Text](MOT16_eval/Screenshot-2025-08-19-193451.png)
+Demo 3 - ![Alt Text](MOT16_eval/Screenshot-2025-08-19-193531.png)
 
-## Quick diagnosis
 
-```bash
-ls -la MOT16_eval
-git ls-files MOT16_eval
-git status -- MOT16_eval README.md
-git lfs ls-files || true
-grep -n "Screenshot 2025-08-19" README.md || true
-```
-
----
-
-## Recommended: rename files and update README (Option A)
+## Quick start
 
 ```bash
-# 1) check files
-ls -la MOT16_eval
-git ls-files MOT16_eval
-git status -- MOT16_eval README.md
+# clone this repo
+git clone --recurse-submodules https://github.com/Ajad-cpu/SpotTrack.git
+cd SpotTrack
 
-# 2) if files with spaces exist locally, rename them
-git mv "MOT16_eval/Screenshot 2025-08-19 193426.png" MOT16_eval/Screenshot-2025-08-19-193426.png || true
-git mv "MOT16_eval/Screenshot 2025-08-19 193451.png" MOT16_eval/Screenshot-2025-08-19-193451.png || true
-git mv "MOT16_eval/Screenshot 2025-08-19 193531.png" MOT16_eval/Screenshot-2025-08-19-193531.png || true
-
-# 3) update README in-place
-perl -0777 -pe 's/MOT16_eval\/Screenshot 2025-08-19 193426.png/MOT16_eval\/Screenshot-2025-08-19-193426.png/g;
-                s/MOT16_eval\/Screenshot 2025-08-19 193451.png/MOT16_eval\/Screenshot-2025-08-19-193451.png/g;
-                s/MOT16_eval\/Screenshot 2025-08-19 193531.png/MOT16_eval\/Screenshot-2025-08-19-193531.png/g' -i README.md
-
-# 4) add, commit, push
-git add MOT16_eval/*.png README.md
-git commit -m "Fix README image links; rename screenshots to remove spaces"
-git push
-```
-
-**If the image files are not present locally**, copy them into `MOT16_eval/` first, then run the `git add` step:
-
-```bash
-cp "/path/to/Screenshot 2025-08-19 193426.png" MOT16_eval/
-cp "/path/to/Screenshot 2025-08-19 193451.png" MOT16_eval/
-cp "/path/to/Screenshot 2025-08-19 193531.png" MOT16_eval/
-# then add, commit, push
-git add MOT16_eval/*.png README.md
-git commit -m "Add demo screenshots"
-git push
+# install (Python 3.8+)
+pip install -r requirements.txt
 ```
 
 ---
 
-## Alternative: apply patch to README only (Option B)
-
-Save the block below as `fix-screenshots.patch` and run:
+## Run tracker
 
 ```bash
-git apply fix-screenshots.patch
-git add README.md
-git commit -m "Fix README image links"
-git push
-```
+# webcam
+python track.py --source 0
 
-Patch content (save as `fix-screenshots.patch`):
-
-```diff
-*** Begin Patch
-*** Update File: README.md
-@@
--Demo 1 - ![Alt Text](MOT16_eval/Screenshot 2025-08-19 193426.png) Demo 2 - ![Alt Text](MOT16_eval/Screenshot 2025-08-19 193451.png)
--Demo 3 - ![Alt Text](MOT16_eval/Screenshot 2025-08-19 193531.png)
-+Demo 1 - ![Demo 1](MOT16_eval/Screenshot-2025-08-19-193426.png)
-+Demo 2 - ![Demo 2](MOT16_eval/Screenshot-2025-08-19-193451.png)
-+Demo 3 - ![Demo 3](MOT16_eval/Screenshot-2025-08-19-193531.png)
-*** End Patch
-```
-
-> Note: Option B only updates `README.md`. If your repo contains files with spaces, run the `git mv` commands from Option A first (or copy the correctly named files into `MOT16_eval/`).
-
----
-
-## Git LFS
-
-If the PNGs were committed with Git LFS but objects are missing, run:
-
-```bash
-git lfs pull
-git lfs ls-files
+# image, video, folder, YouTube or stream
+python track.py --source img.jpg
+python track.py --source vid.mp4
+python track.py --source 'https://youtu.be/...'
+python track.py --source 'rtsp://...'
 ```
 
 ---
 
-If you want, I can also generate a combined patch that renames the files and updates README so you can `git apply` it. Reply `patch please` and I will produce it.
+## Choose YOLOv5 model
+
+```bash
+# use a specific YOLOv5 weights file and image size
+python track.py --source 0 --yolo_weights yolov5s.pt --img 640
+```
+
+---
+
+## Track specific classes
+
+```bash
+# track persons only (COCO class 0)
+python track.py --source 0 --classes 0
+```
+
+---
+
+## Save results
+
+```bash
+# save tracking results as text (bounding boxes + IDs)
+python track.py --source ... --save-txt
+```
+
+---
+
+## Files of interest
+
+* `track.py` — main tracking entrypoint for images, videos, streams.
+* `requirements.txt` — Python dependencies.
+* `LICENSE` — GPL-3.0 license.
+
+---
+
+## About
+
+SpotTrack combines YOLOv5 detection with a DeepSORT-style tracker in PyTorch so you can run fast, real-time multi-object tracking on CPUs/GPUs and adapt to different models and classes.
+
+---
+
+## License
+
+This project is released under the GPL-3.0 license.
