@@ -1,9 +1,9 @@
 # SpotTrack — YOLOv5 + DeepSort (PyTorch)
 
+---
 Lightweight, real-time multi-object tracking that combines YOLOv5 detections with a Deep SORT–style re-identification tracker in PyTorch. Configurable for speed or accuracy; runs on images, video, webcams and streams; tracks any object classes your YOLOv5 model is trained to detect.
 Demo 1 - ![Alt Text](MOT16_eval/Screenshot 2025-08-19 193426.png) Demo 2 - ![Alt Text](MOT16_eval/Screenshot 2025-08-19 193451.png)
 Demo 3 - ![Alt Text](MOT16_eval/Screenshot 2025-08-19 193531.png)
----
 
 ## Quick start
 
